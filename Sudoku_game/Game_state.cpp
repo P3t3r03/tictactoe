@@ -6,9 +6,6 @@
 
 void print_game(const game_state &game) {
     if((game.board_O & game.board_X) == 0){
-        std::cout << "In here lol " << std::endl;
-        std::cout << std::bitset<9>(game.board_O) << std::endl;
-        std::cout << std::bitset<9>(game.board_X) << std::endl;
         std::cout <<  "-------" << std::endl;
         for(int i = 0; i < 3; i++) {
             for(int j = 0; j < 3; j++) {
@@ -16,7 +13,7 @@ void print_game(const game_state &game) {
                 if(get_bit(game.board_O, i + j*3)) {
                     std::cout << "O";
                 }
-                else if(get_bit(game.board_X, i*3 + j)) {
+                else if(get_bit(game.board_X, i + j*3)) {
                     std::cout << "X";
                 }
                 else {
@@ -32,7 +29,23 @@ void print_game(const game_state &game) {
 }
 
 
-bool game_won(const game_state &game) {
+bool game_won(const uint16_t &board) {
+    for(int i = 0; i < 3; i++) {
+        uint16_t test_vert = (board >> (i*3));  // For Vertical wins
+        uint16_t test_hori = (board >> i);
+        if(test_vert == 7) { //Uses 7 here as it's bit representation is 111
+            return true;
+        }
+        if((test_hori & 73) == 73) { // Uses 73 as it's bit representaiton is 1001001 need to and it in case other numbers are in there
+            return true;
+        }
+        if((board & 84) == 84) { // binary representation of 001010100 is 84 also and'd
+            return true;
+        }
+        if((board & 273) == 273) { // binary representation of 100010001 is 273 also and'd
+            return true;
+        }
+    }
     return false;
 }
 void take_turn(game_state &game) {
@@ -45,10 +58,33 @@ void take_turn(game_state &game) {
     std::cin >> col;
     row -= 1;
     col -= 1;
-    if(row < 3 && col < 3) {
-        index = row + col * 3;
-        game.board_O = set_bit(game.board_O, index);
-        game.turn |= game.turn;
+    index = row + col * 3;
+    if(row < 3 && col < 3 && (((game.board_O | game.board_X) & (1 << index)) == 0)) {
+        if(game.turn) {
+            game.board_O = set_bit(game.board_O, index);
+            if(game_won(game.board_O)) {
+                print_game(game);
+                std::cout << "The O's Won!!" << std::endl;
+                game.won = true;
+            }
+            else {
+                game.turn = !game.turn;
+                take_turn(game);
+            }
+        }
+        else {
+            game.board_X = set_bit(game.board_X, index);
+            if(game_won(game.board_X)) {
+                print_game(game);
+                std::cout << "The X's Won!!" << std::endl;
+                game.won = true;
+            }
+            else {
+                game.turn = !game.turn;
+                take_turn(game);                  
+            }       
+        }
+        
     }
     else{
         std::cout << "You entered an incorrect value for the row or column please retry" << std::endl;

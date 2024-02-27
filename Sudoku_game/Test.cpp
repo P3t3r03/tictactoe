@@ -4,19 +4,12 @@
 
 
 int main() {
-    uint16_t X = 33;
-    uint16_t O = 2;
-    bool turn = false;
-    bool game_won = false;
+
     game_state game;
-    game.board_O = O;
-    game.board_X = X;
-    game.turn = turn;
-    while(!game_won) {
-        take_turn(game);
-        take_turn(game);
-        take_turn(game);
-    }
+    game.board_O = 0;
+    game.board_X = 0;
+    game.turn = false;
+    game.won = false;
     take_turn(game);
     return 0;
 }
