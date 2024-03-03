@@ -1,12 +1,14 @@
 [
 {
-  "directory": "/workspaces/tictactoe/build",
-  "command": "/usr/bin/clang++    -g   -o CMakeFiles/test.dir/Test.cpp.o -c /workspaces/tictactoe/TicTacToe/Test.cpp",
-  "file": "/workspaces/tictactoe/TicTacToe/Test.cpp"
+  "directory": "/Users/peterleyden/projects/tictactoe/build",
+  "command": "/usr/bin/clang++   -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk -mmacosx-version-min=13.5 -o CMakeFiles/test.dir/Test.cpp.o -c /Users/peterleyden/projects/tictactoe/TicTacToe/Test.cpp",
+  "file": "/Users/peterleyden/projects/tictactoe/TicTacToe/Test.cpp",
+  "output": "CMakeFiles/test.dir/Test.cpp.o"
 },
 {
-  "directory": "/workspaces/tictactoe/build",
-  "command": "/usr/bin/clang++    -g   -o CMakeFiles/test.dir/Game_state.cpp.o -c /workspaces/tictactoe/TicTacToe/Game_state.cpp",
-  "file": "/workspaces/tictactoe/TicTacToe/Game_state.cpp"
+  "directory": "/Users/peterleyden/projects/tictactoe/build",
+  "command": "/usr/bin/clang++   -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk -mmacosx-version-min=13.5 -o CMakeFiles/test.dir/Game_state.cpp.o -c /Users/peterleyden/projects/tictactoe/TicTacToe/Game_state.cpp",
+  "file": "/Users/peterleyden/projects/tictactoe/TicTacToe/Game_state.cpp",
+  "output": "CMakeFiles/test.dir/Game_state.cpp.o"
 }
 ]

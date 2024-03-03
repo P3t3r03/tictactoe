@@ -13,7 +13,7 @@ struct game_state {
 
 void print_game(const game_state &game);
 
-bool game_won(const game_state &game);
+bool game_won(const uint16_t &board);
 
 void take_turn(game_state &game);
 

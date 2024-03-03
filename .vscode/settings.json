@@ -111,5 +111,5 @@
     "vector": "cpp",
     "algorithm": "cpp"
   },
-  "cmake.sourceDirectory": "/workspaces/tictactoe/TicTacToe"
+  "cmake.sourceDirectory": "/Users/peterleyden/projects/tictactoe/TicTacToe"
 }
