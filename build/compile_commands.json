@@ -1,0 +1,12 @@
+[
+{
+  "directory": "/workspaces/tictactoe/build",
+  "command": "/usr/bin/clang++    -g   -o CMakeFiles/test.dir/Test.cpp.o -c /workspaces/tictactoe/TicTacToe/Test.cpp",
+  "file": "/workspaces/tictactoe/TicTacToe/Test.cpp"
+},
+{
+  "directory": "/workspaces/tictactoe/build",
+  "command": "/usr/bin/clang++    -g   -o CMakeFiles/test.dir/Game_state.cpp.o -c /workspaces/tictactoe/TicTacToe/Game_state.cpp",
+  "file": "/workspaces/tictactoe/TicTacToe/Game_state.cpp"
+}
+]
