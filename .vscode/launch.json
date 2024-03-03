@@ -6,8 +6,8 @@
       "type": "lldb",
       "request": "launch",
       "args": [],
-      "cwd": "/Users/peterleyden/projects/Sudoku_game/tictactoe/Sudoku_game",
-      "program": "/Users/peterleyden/projects/Sudoku_game/tictactoe/Sudoku_game/build/Debug/outDebug"
+      "cwd": "/Users/peterleyden/projects/tictactoe/TicTacToe",
+      "program": "/Users/peterleyden/projects/tictactoe/build/Debug/outDebug"
     }
   ]
 }

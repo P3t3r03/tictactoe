@@ -34,16 +34,16 @@ bool game_won(const uint16_t &board) {
     for(int i = 0; i < 3; i++) {
         uint16_t test_vert = (board >> (i*3));  // For Vertical wins
         uint16_t test_hori = (board >> i);
-        if(test_vert == 0b111) { //Uses 7 here as it's bit representation is 111
+        if(test_vert == 7) { //Uses 7 here as it's bit representation is 111
             return true;
         }
-        if((test_hori & 73) == 0b1001001) { // Uses 73 as it's bit representaiton is 1001001 need to and it in case other numbers are in there
+        if((test_hori & 73) == 73) { // Uses 73 as it's bit representaiton is 1001001 need to and it in case other numbers are in there
             return true;
         }
-        if((board & 84) == 0b001010100) { // binary representation of 001010100 is 84 also and'd
+        if((board & 84) == 84) { // binary representation of 001010100 is 84 also and'd
             return true;
         }
-        if((board & 273) == 0b100010001) { // binary representation of 100010001 is 273 also and'd
+        if((board & 273) == 273) { // binary representation of 100010001 is 273 also and'd
             return true;
         }
     }
@@ -69,8 +69,15 @@ void take_turn(game_state &game) {
                 game.won = true;
             }
             else {
-                game.turn = !game.turn;
-                take_turn(game);
+                if ((game.board_O | game.board_X) == 0b111111111) {
+                    std::cout << "The Game was a Draw" << std::endl;
+                    game.won = true;
+                    print_game(game);
+                }
+                else{
+                    game.turn = !game.turn;
+                    take_turn(game);
+                }
             }
         }
             

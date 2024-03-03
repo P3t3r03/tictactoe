@@ -4,6 +4,7 @@
 #include "Game_state.hpp"
 #include "bit_operations.hpp"
 #include <iostream>
+#include <cstdlib>
 
 void random_move(game_state &game) {
         int index;
