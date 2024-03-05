@@ -10,6 +10,7 @@ int main() {
     game.board_X = 0;
     game.turn = true;
     game.won = false;
+    game.gridsize = 4;
     take_turn(game);
     return 0;
 }

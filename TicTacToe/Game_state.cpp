@@ -4,17 +4,18 @@
 
 #include <iostream>
 #include <bitset>
+#include <cmath>
 
 void print_game(const game_state &game) {
     if((game.board_O & game.board_X) == 0){
         std::cout <<  "-------" << std::endl;
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 3; j++) {
+        for(int i = 0; i < game.gridsize; i++) {
+            for(int j = 0; j < game.gridsize; j++) {
                 std::cout << "|";
-                if(get_bit(game.board_O, i + j*3)) {
+                if(get_bit(game.board_O, i + j*game.gridsize)) {
                     std::cout << "O";
                 }
-                else if(get_bit(game.board_X, i + j*3)) {
+                else if(get_bit(game.board_X, i + j*game.gridsize)) {
                     std::cout << "X";
                 }
                 else {
@@ -30,7 +31,7 @@ void print_game(const game_state &game) {
 }
 
 
-bool game_won(const uint16_t &board) {
+bool game_won(const uint16_t &board, const uint8_t &gridsize) {
     /*for(int i = 0; i < 3; i++) {
         uint16_t test_vert = (board >> (i*3));  // For Vertical wins
         uint16_t test_hori = (board >> i);
@@ -50,15 +51,15 @@ bool game_won(const uint16_t &board) {
     return false;*/
     bool tl_br = true;
     bool tr_bl= true;
-    for(int i = 0; i < 3; i++) {
+    for(int i = 0; i < gridsize; i++) {
         bool row = true;
         bool col = true;
-        tl_br &= get_bit(board, 4*i);
-        tr_bl &= get_bit(board, 2 + 2*i);
-        for(int j = 0; j < 3; j++){
-            row &= get_bit(board, i + 3*j);
-            std::cout << row << std::endl;
-            col &= get_bit(board, 3*j + i);
+        tl_br &= get_bit(board, (gridsize+1)*i);
+        tr_bl &= get_bit(board, (gridsize-1) + (gridsize-1)*i);
+        for(int j = 0; j < gridsize; j++){
+            row &= get_bit(board, i + gridsize*j);
+            col &= get_bit(board, gridsize*i + j);
+            std::cout << row << ", " << col << std::endl;
         }
 
         if(row || col) {
@@ -82,16 +83,17 @@ void take_turn(game_state &game) {
         std::cin >> col;
         row -= 1;
         col -= 1;
-        index = row + col * 3;
-        if(row < 3 && col < 3 && (((game.board_O | game.board_X) & (1 << index)) == 0)) {
+        index = row + col * game.gridsize;
+        if(row < game.gridsize && col < game.gridsize && (((game.board_O | game.board_X) & (1 << index)) == 0)) {
             game.board_O = set_bit(game.board_O, index);
-            if(game_won(game.board_O)) {
+            if(game_won(game.board_O, game.gridsize)) {
                 print_game(game);
                 std::cout << "The O's Won!!" << std::endl;
                 game.won = true;
             }
             else {
-                if ((game.board_O | game.board_X) == 511) { //511 is the representation of 111111111
+                std::cout << (std::pow(2,(std::pow(game.gridsize,2)))-1) << std::endl;
+                if ((game.board_O | game.board_X) == (std::pow(2,(std::pow(game.gridsize,2)))-1)) { //511 is the representation of 111111111
                     std::cout << "The Game was a Draw" << std::endl;
                     game.won = true;
                     print_game(game);

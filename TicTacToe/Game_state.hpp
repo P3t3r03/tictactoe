@@ -14,7 +14,7 @@ struct game_state {
 
 void print_game(const game_state &game);
 
-bool game_won(const uint16_t &board);
+bool game_won(const uint16_t &board, const uint8_t &gridsize);
 
 void take_turn(game_state &game);
 
