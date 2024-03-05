@@ -6,13 +6,13 @@
 
 template<typename T>
 bool get_bit(const T num, const int index) {
-    bool bit = num & (1 << index);
+    bool bit = num & ((static_cast<T>(1)) << index);
     return bit;
 }
 
 template<typename T>
 T set_bit(T num, const int index) {
-    T mask = 1 << index;
+    T mask = (static_cast<T>(1)) << index; 
     return mask | num;
 }
 #endif

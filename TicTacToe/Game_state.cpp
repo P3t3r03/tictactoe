@@ -8,7 +8,8 @@
 
 void print_game(const game_state &game) {
     if((game.board_O & game.board_X) == 0){
-        std::cout <<  "-------" << std::endl;
+        std::cout << std::endl << std::endl;
+        std::cout <<  std::string(2*(game.gridsize)+1, '-') << std::endl;
         for(int i = 0; i < game.gridsize; i++) {
             for(int j = 0; j < game.gridsize; j++) {
                 std::cout << "|";
@@ -22,34 +23,21 @@ void print_game(const game_state &game) {
                     std::cout << " ";
                 }                
             }
-            std::cout << "|" << std::endl << "-------" << std::endl;
+            std::cout << "|" << std::endl << std::string(2*(game.gridsize)+1, '-') << std::endl;
         }
+
     }
     else {
-        std::cout << "Error in Game State" << std::endl;
+        std::bitset<64> board_O(game.board_O);
+        std::bitset<64> board_X(game.board_X);
+        std::cout << board_O << std::endl << board_X << std::endl;
+        std::cout << "Error in Game State" << std::endl; 
     }
 }
 
 
-bool game_won(const uint16_t &board, const uint8_t &gridsize) {
-    /*for(int i = 0; i < 3; i++) {
-        uint16_t test_vert = (board >> (i*3));  // For Vertical wins
-        uint16_t test_hori = (board >> i);
-        if((test_vert & 7) == 7) { //Uses 7 here as it's bit representation is 111
-            return true;
-        }
-        if((test_hori & 73) == 73) { // Uses 73 as it's bit representaiton is 1001001 need to and it in case other numbers are in there
-            return true;
-        }
-        if((board & 84) == 84) { // binary representation of 001010100 is 84 also and'd
-            return true;
-        }
-        if((board & 273) == 273) { // binary representation of 100010001 is 273 also and'd
-            return true;
-        }
-    }
-    return false;*/
-    bool tl_br = true;
+bool game_won(const uint64_t &board, const int &gridsize) {
+    bool tl_br = true; // Checks for Diagonals
     bool tr_bl= true;
     for(int i = 0; i < gridsize; i++) {
         bool row = true;
@@ -59,13 +47,10 @@ bool game_won(const uint16_t &board, const uint8_t &gridsize) {
         for(int j = 0; j < gridsize; j++){
             row &= get_bit(board, i + gridsize*j);
             col &= get_bit(board, gridsize*i + j);
-            std::cout << row << ", " << col << std::endl;
         }
-
         if(row || col) {
             return true;
         }
-        
     }
     if (tl_br || tr_bl) {
         return true;
@@ -78,13 +63,13 @@ void take_turn(game_state &game) {
 
         int row, col, index;
         std::cout << "Enter the Row you would like to play: ";
-        std::cin >> row ;
+        std::cin >> row;
         std::cout << "Enter the Column you would like to play: ";
         std::cin >> col;
         row -= 1;
         col -= 1;
         index = row + col * game.gridsize;
-        if(row < game.gridsize && col < game.gridsize && (((game.board_O | game.board_X) & (1 << index)) == 0)) {
+        if(row < game.gridsize && col < game.gridsize && (((game.board_O | game.board_X) & (static_cast<uint64_t>(1) << index)) == 0)) {
             game.board_O = set_bit(game.board_O, index);
             if(game_won(game.board_O, game.gridsize)) {
                 print_game(game);
@@ -92,7 +77,6 @@ void take_turn(game_state &game) {
                 game.won = true;
             }
             else {
-                std::cout << (std::pow(2,(std::pow(game.gridsize,2)))-1) << std::endl;
                 if ((game.board_O | game.board_X) == (std::pow(2,(std::pow(game.gridsize,2)))-1)) { //511 is the representation of 111111111
                     std::cout << "The Game was a Draw" << std::endl;
                     game.won = true;
