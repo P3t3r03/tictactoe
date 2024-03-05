@@ -9,6 +9,7 @@ struct game_state {
     uint16_t board_X; // using as I want to use a uint64 for a chess engine in the future
     bool turn; //true for O false for X 
     bool won; 
+    uint8_t gridsize;
 };
 
 void print_game(const game_state &game);

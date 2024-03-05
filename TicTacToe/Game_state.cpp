@@ -31,10 +31,10 @@ void print_game(const game_state &game) {
 
 
 bool game_won(const uint16_t &board) {
-    for(int i = 0; i < 3; i++) {
+    /*for(int i = 0; i < 3; i++) {
         uint16_t test_vert = (board >> (i*3));  // For Vertical wins
         uint16_t test_hori = (board >> i);
-        if(test_vert == 7) { //Uses 7 here as it's bit representation is 111
+        if((test_vert & 7) == 7) { //Uses 7 here as it's bit representation is 111
             return true;
         }
         if((test_hori & 73) == 73) { // Uses 73 as it's bit representaiton is 1001001 need to and it in case other numbers are in there
@@ -46,6 +46,28 @@ bool game_won(const uint16_t &board) {
         if((board & 273) == 273) { // binary representation of 100010001 is 273 also and'd
             return true;
         }
+    }
+    return false;*/
+    bool tl_br = true;
+    bool tr_bl= true;
+    for(int i = 0; i < 3; i++) {
+        bool row = true;
+        bool col = true;
+        tl_br &= get_bit(board, 4*i);
+        tr_bl &= get_bit(board, 2 + 2*i);
+        for(int j = 0; j < 3; j++){
+            row &= get_bit(board, i + 3*j);
+            std::cout << row << std::endl;
+            col &= get_bit(board, 3*j + i);
+        }
+
+        if(row || col) {
+            return true;
+        }
+        
+    }
+    if (tl_br || tr_bl) {
+        return true;
     }
     return false;
 }
@@ -69,7 +91,7 @@ void take_turn(game_state &game) {
                 game.won = true;
             }
             else {
-                if ((game.board_O | game.board_X) == 0b111111111) {
+                if ((game.board_O | game.board_X) == 511) { //511 is the representation of 111111111
                     std::cout << "The Game was a Draw" << std::endl;
                     game.won = true;
                     print_game(game);

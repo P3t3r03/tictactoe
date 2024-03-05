@@ -18,6 +18,11 @@ void random_move(game_state &game) {
     game.board_X = set_bit(game.board_X, index);
 }
 
+void minimax_move(game_state &game) {
+    
+}
+
+
 
 void Opponent_turn(game_state &game) {
     random_move(game);
