@@ -11,8 +11,13 @@ bool get_bit(const T num, const int index) {
 }
 
 template<typename T>
-T set_bit(T num, const int index) {
+T set_bit_true(T num, const int index) {
     T mask = (static_cast<T>(1)) << index; 
     return mask | num;
+}
+template<typename T>
+T set_bit_false(T num, const int index) {
+    T mask = (static_cast<T>(1)) << index; 
+    return (~mask) & num;
 }
 #endif

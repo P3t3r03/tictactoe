@@ -57,6 +57,15 @@ bool game_won(const uint64_t &board, const int &gridsize) {
     }
     return false;
 }
+
+bool is_tie(const game_state &game) {
+    //Returns true if it is a tie
+    if((game.board_O | game.board_X) == (std::pow(2,(std::pow(game.gridsize,2)))-1)) {
+        return true;
+    }
+    return false;
+}
+
 void take_turn(game_state &game) {
     print_game(game);
     if(game.turn) {
@@ -70,14 +79,14 @@ void take_turn(game_state &game) {
         col -= 1;
         index = row + col * game.gridsize;
         if(row < game.gridsize && col < game.gridsize && (((game.board_O | game.board_X) & (static_cast<uint64_t>(1) << index)) == 0)) {
-            game.board_O = set_bit(game.board_O, index);
+            game.board_O = set_bit_true(game.board_O, index);
             if(game_won(game.board_O, game.gridsize)) {
                 print_game(game);
                 std::cout << "The O's Won!!" << std::endl;
                 game.won = true;
             }
             else {
-                if ((game.board_O | game.board_X) == (std::pow(2,(std::pow(game.gridsize,2)))-1)) { //511 is the representation of 111111111
+                if (is_tie(game)) { 
                     std::cout << "The Game was a Draw" << std::endl;
                     game.won = true;
                     print_game(game);
