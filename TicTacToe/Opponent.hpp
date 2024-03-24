@@ -24,10 +24,11 @@ class minimax {
     public:
 
 
-        move minimax_move(game_state &game) {
+        move minimax_move(game_state &game, int depth) {
 
             int eval = std::numeric_limits<int>::max();
             move optimal_move;
+            int pos_looked_at = 0;
 
             int index;
             for(int row = 0; row < game.gridsize; row++) {
@@ -35,8 +36,8 @@ class minimax {
                     index = row + col*game.gridsize; 
                     if(((game.board_O | game.board_X) & (static_cast<uint64_t>(1) << index)) == 0) {
                         game.board_X = set_bit_true(game.board_X, index);
-                        
-                        int temp = MaxSearch(game);
+                        pos_looked_at += 1;
+                        int temp = MaxSearch(game, depth - 1, pos_looked_at);
 
                         if (temp < eval) {
                             eval = temp;
@@ -47,14 +48,18 @@ class minimax {
                     }
                 }
             }
+            std::cout << "positions looked at: " << pos_looked_at << " with eval of: " << eval << std::endl;
             return optimal_move;           
         }
 
-        int MaxSearch(game_state &game) {
+        int MaxSearch(game_state &game, int depth, int &pos_looked_at) {
             if (game_won(game.board_X, game.gridsize)) {
                 return -1;
             }
             else if (is_tie(game)) {
+                return 0;
+            }
+            else if (depth == 0) {
                 return 0;
             }
             int eval = std::numeric_limits<int>::min();
@@ -63,7 +68,8 @@ class minimax {
                     int index = row + col*game.gridsize;
                     if(((game.board_O | game.board_X) & (static_cast<uint64_t>(1) << index)) == 0) {
                         game.board_O = set_bit_true(game.board_O, index);
-                        eval = std::max(eval, MinSearch(game));
+                        pos_looked_at += 1;
+                        eval = std::max(eval, MinSearch(game, depth -1, pos_looked_at));
                         game.board_O = set_bit_false(game.board_O, index);
                     }
                 }
@@ -71,20 +77,24 @@ class minimax {
             return eval;
         }
 
-        int MinSearch(game_state &game) {
+        int MinSearch(game_state &game, int depth, int &pos_looked_at) {
             if (game_won(game.board_O, game.gridsize)) {
                 return 1;
             }
             else if (is_tie(game)) {
                 return 0;
             }
-            int eval = std::numeric_limits<int>::min();
+            else if (depth == 0) {
+                return 0;
+            }
+            int eval = std::numeric_limits<int>::max();
             for (int row = 0; row < game.gridsize; row++) {
                 for (int col = 0; col < game.gridsize; col++) {
                     int index = row + col*game.gridsize;
                     if(((game.board_O | game.board_X) & (static_cast<uint64_t>(1) << index)) == 0) {
                         game.board_X = set_bit_true(game.board_X, index);
-                        eval = std::min(eval, MaxSearch(game));
+                        pos_looked_at += 1;
+                        eval = std::min(eval, MaxSearch(game, depth - 1, pos_looked_at));
                         game.board_X = set_bit_false(game.board_X, index);
                     }
                 }
@@ -94,9 +104,9 @@ class minimax {
 };
 
 
-void Opponent_turn(game_state &game) {
+void Opponent_turn(game_state &game, int depth) {
     minimax optimal_move_finder;
-    move optimal_move = optimal_move_finder.minimax_move(game);
+    move optimal_move = optimal_move_finder.minimax_move(game, depth);
     std::cout << "Optimal Move Row: " << optimal_move.row << " Col: " << optimal_move.col << std::endl;
     int index = optimal_move.row + optimal_move.col*game.gridsize;
     game.board_X = set_bit_true(game.board_X, index);
@@ -113,7 +123,7 @@ void Opponent_turn(game_state &game) {
         }
         else {
             game.turn = !game.turn;
-            take_turn(game);  
+            take_turn(game, depth);  
         }
     }
 }

@@ -66,7 +66,7 @@ bool is_tie(const game_state &game) {
     return false;
 }
 
-void take_turn(game_state &game) {
+void take_turn(game_state &game, int depth) {
     print_game(game);
     if(game.turn) {
 
@@ -93,17 +93,17 @@ void take_turn(game_state &game) {
                 }
                 else{
                     game.turn = !game.turn;
-                    take_turn(game);
+                    take_turn(game, depth);
                 }
             }
         }
             
         else{
             std::cout << "You entered an incorrect value for the row or column please retry" << std::endl;
-            take_turn(game);
+            take_turn(game, depth);
         }
     }
     else {
-        Opponent_turn(game);
+        Opponent_turn(game, depth);
     }
 }

@@ -22,6 +22,6 @@ bool game_won(const uint64_t &board, const int &gridsize);
 
 bool is_tie(const game_state &game);
 
-void take_turn(game_state &game);
+void take_turn(game_state &game, int depth);
 
 #endif
