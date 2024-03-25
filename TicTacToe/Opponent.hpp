@@ -29,6 +29,8 @@ class minimax {
             int eval = std::numeric_limits<int>::max();
             move optimal_move;
             int pos_looked_at = 0;
+            int alpha = std::numeric_limits<int>::min();
+            int beta = std::numeric_limits<int>::max();
 
             int index;
             for(int row = 0; row < game.gridsize; row++) {
@@ -37,7 +39,7 @@ class minimax {
                     if(((game.board_O | game.board_X) & (static_cast<uint64_t>(1) << index)) == 0) {
                         game.board_X = set_bit_true(game.board_X, index);
                         pos_looked_at += 1;
-                        int temp = MaxSearch(game, depth - 1, pos_looked_at);
+                        int temp = MaxSearch(game, depth - 1, pos_looked_at, alpha, beta);
 
                         if (temp < eval) {
                             eval = temp;
@@ -52,7 +54,7 @@ class minimax {
             return optimal_move;           
         }
 
-        int MaxSearch(game_state &game, int depth, int &pos_looked_at) {
+        int MaxSearch(game_state &game, int depth, int &pos_looked_at, int alpha, int beta) {
             if (game_won(game.board_X, game.gridsize)) {
                 return -1;
             }
@@ -69,15 +71,19 @@ class minimax {
                     if(((game.board_O | game.board_X) & (static_cast<uint64_t>(1) << index)) == 0) {
                         game.board_O = set_bit_true(game.board_O, index);
                         pos_looked_at += 1;
-                        eval = std::max(eval, MinSearch(game, depth -1, pos_looked_at));
+                        eval = std::max(eval, MinSearch(game, depth -1, pos_looked_at, alpha, beta));
                         game.board_O = set_bit_false(game.board_O, index);
+                        alpha = std::max(alpha, eval);
+                        if(eval >= beta) {
+                            return eval;
+                        }
                     }
                 }
             }
             return eval;
         }
 
-        int MinSearch(game_state &game, int depth, int &pos_looked_at) {
+        int MinSearch(game_state &game, int depth, int &pos_looked_at, int alpha, int beta) {
             if (game_won(game.board_O, game.gridsize)) {
                 return 1;
             }
@@ -94,8 +100,12 @@ class minimax {
                     if(((game.board_O | game.board_X) & (static_cast<uint64_t>(1) << index)) == 0) {
                         game.board_X = set_bit_true(game.board_X, index);
                         pos_looked_at += 1;
-                        eval = std::min(eval, MaxSearch(game, depth - 1, pos_looked_at));
+                        eval = std::min(eval, MaxSearch(game, depth - 1, pos_looked_at, alpha, beta));
                         game.board_X = set_bit_false(game.board_X, index);
+                        beta = std::min(eval, beta);
+                        if(eval <= alpha) {
+                            return eval;
+                        }
                     }
                 }
             }
