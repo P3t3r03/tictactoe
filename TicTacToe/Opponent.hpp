@@ -26,6 +26,9 @@ class minimax {
 
         move minimax_move(game_state &game, int depth) {
 
+            	//Starting time
+            std::chrono::high_resolution_clock::time_point startTime = std::chrono::high_resolution_clock::now();
+            std::chrono::high_resolution_clock::time_point time;
             int eval = std::numeric_limits<int>::max();
             move optimal_move;
             int pos_looked_at = 0;

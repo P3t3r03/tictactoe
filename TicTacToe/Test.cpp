@@ -1,6 +1,7 @@
 #include "Game_state.hpp"
 
 #include<iostream>
+#include<chrono>
 
 
 int main() {
@@ -11,6 +12,7 @@ int main() {
     std::cin >> game.gridsize;
     std::cout << "Please choose a depth for the minimax algorithm to search(recommended 6 for higher then 3x3): ";
     std::cin >> depth;
+    //Starting time
     game.board_O = 0;
     game.board_X = 0;
     game.turn = true;
